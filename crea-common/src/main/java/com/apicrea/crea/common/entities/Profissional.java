@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
-import com.apicrea.crea.common.enums.StatusRegistro;
-import com.apicrea.crea.common.enums.TipoCadastro;
+import com.apicrea.crea.common.enums.Registro;
+import com.apicrea.crea.common.enums.Cadastro;
 import com.apicrea.crea.common.responses.dto.ProfissionalDto;
 
 import jakarta.persistence.Column;
@@ -55,16 +55,16 @@ public class Profissional {
 	@Column(name = "DC_NUMERO", nullable = false)
 	private String numeroCelular;
 
-	@Column(name = "DC_CODIGO", nullable = false, unique = true)
+	@Column(name = "DC_CODIGO")
 	private String codigo;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DC_STATUS")
-	private StatusRegistro statusRegistro;
+	private Registro statusRegistro;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DC_CADASTRO")
-	private TipoCadastro statusCadastro;
+	private Cadastro statusCadastro;
 
 	@Column(name = "DATA_VISTO")
 	@Temporal(TemporalType.DATE)

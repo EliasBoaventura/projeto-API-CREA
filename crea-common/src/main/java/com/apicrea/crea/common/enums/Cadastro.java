@@ -7,14 +7,14 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum TipoCadastro {
+public enum Cadastro {
 	
 	 REGISTRADO("Registrado"),
 	    VISADO("Visado");
 
 	    private String statusCadastro;
 
-	    public static TipoCadastro of(String registro) {
+	    public static Cadastro of(String registro) {
 	        return Stream.of(values())
 	                     .filter(c -> c.statusCadastro.equals(registro)) 
 	                     .findFirst()

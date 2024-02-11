@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum StatusRegistro {
+public enum Registro {
 
 	ATIVO("Ativo"),
     INATIVO("Inativo"),
@@ -15,7 +15,7 @@ public enum StatusRegistro {
 
     private String statusRegistro;
 
-    public static StatusRegistro of(String statusRegistro) {
+    public static Registro of(String statusRegistro) {
         return Stream.of(values())
                      .filter(c -> c.statusRegistro.equals(statusRegistro)) 
                      .findFirst()

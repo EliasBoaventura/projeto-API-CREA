@@ -8,14 +8,16 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.apicrea.crea.common.entities.Profissional;
 import com.apicrea.crea.common.entities.Titulos;
-import com.apicrea.crea.common.enums.StatusRegistro;
-import com.apicrea.crea.common.enums.TipoCadastro;
+import com.apicrea.crea.common.enums.Registro;
+import com.apicrea.crea.common.enums.Cadastro;
 import com.apicrea.crea.common.requests.ProfissionalRequest;
+import com.apicrea.crea.common.responses.dto.ProfissionalDto;
 
 import lombok.Data;
 
 @Data
 public class ProfissionalResponse {
+
 	private Long id;
 
 	private String nome;
@@ -34,9 +36,9 @@ public class ProfissionalResponse {
 
 	private String codigo;
 
-	private StatusRegistro statusRegistro;
+	private Registro statusRegistro;
 
-	private TipoCadastro statusCadastro;
+	private Cadastro statusCadastro;
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private LocalDate visto;
@@ -47,11 +49,15 @@ public class ProfissionalResponse {
 
 	}
 
+	public ProfissionalResponse(Profissional profissional) {
+		BeanUtils.copyProperties(profissional, this);
+	}
+
 	public ProfissionalResponse(ProfissionalRequest profissionalRequest) {
 		BeanUtils.copyProperties(profissionalRequest, this);
 	}
 	
-	public ProfissionalResponse(Profissional profissional) {
-		BeanUtils.copyProperties(profissional, this);
+	public ProfissionalResponse(ProfissionalDto profissionalDto) {
+		BeanUtils.copyProperties(profissionalDto, this);
 	}
 }

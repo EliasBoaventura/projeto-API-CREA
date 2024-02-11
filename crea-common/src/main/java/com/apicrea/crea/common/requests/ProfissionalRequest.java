@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 
+import com.apicrea.crea.common.enums.Cadastro;
+
 import lombok.Data;
 
 @Data
@@ -33,7 +35,7 @@ public class ProfissionalRequest {
 	private String numeroCelular;
 
 	@NonNull
-	private String codigo;
+	private Cadastro statusCadastro;
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@NonNull

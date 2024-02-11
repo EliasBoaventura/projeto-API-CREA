@@ -6,6 +6,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 
 import com.apicrea.crea.common.entities.Profissional;
+import com.apicrea.crea.common.enums.Registro;
+import com.apicrea.crea.common.enums.Cadastro;
 import com.apicrea.crea.common.requests.ProfissionalRequest;
 
 import lombok.Data;
@@ -14,7 +16,7 @@ import lombok.Data;
 public class ProfissionalDto {
 
 	private Long id;
-
+	
 	private String nome;
 
 	private String email;
@@ -26,8 +28,12 @@ public class ProfissionalDto {
 	private LocalDate dataRegistro;
 
 	private String numeroCelular;
-
+	
 	private String codigo;
+	
+	private Registro statusRegistro;
+
+	private Cadastro statusCadastro;
 
 	private LocalDate visto;
 
@@ -43,7 +49,5 @@ public class ProfissionalDto {
 		ModelMapper modelMapper = new ModelMapper();
 		modelMapper.map(profissionalRequest, this);
 	}
-	
-	
 
 }
