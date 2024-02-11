@@ -5,8 +5,6 @@ import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 
-import com.apicrea.crea.common.enums.TipoCadastro;
-
 import lombok.Data;
 
 @Data
@@ -36,9 +34,6 @@ public class ProfissionalRequest {
 
 	@NonNull
 	private String codigo;
-
-	@NonNull
-	private TipoCadastro statusCadastro;
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@NonNull

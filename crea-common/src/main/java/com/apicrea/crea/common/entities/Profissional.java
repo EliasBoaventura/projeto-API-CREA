@@ -3,8 +3,11 @@ package com.apicrea.crea.common.entities;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
+
 import com.apicrea.crea.common.enums.StatusRegistro;
 import com.apicrea.crea.common.enums.TipoCadastro;
+import com.apicrea.crea.common.responses.dto.ProfissionalDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -56,20 +59,27 @@ public class Profissional {
 	private String codigo;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "DC_STATUS", nullable = false)
+	@Column(name = "DC_STATUS")
 	private StatusRegistro statusRegistro;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "DC_CADASTRO", nullable = false)
+	@Column(name = "DC_CADASTRO")
 	private TipoCadastro statusCadastro;
 
 	@Column(name = "DATA_VISTO")
 	@Temporal(TemporalType.DATE)
 	private LocalDate visto;
-	
+
 	@ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "PROFISSIONAL_TITULO",
-               joinColumns = @JoinColumn(name = "PROFISSIONAL_ID"),
-               inverseJoinColumns = @JoinColumn(name = "TITULO_ID"))
-    private List<Titulos> titulos;
+	@JoinTable(name = "PROFISSIONAL_TITULO", joinColumns = @JoinColumn(name = "PROFISSIONAL_ID"), inverseJoinColumns = @JoinColumn(name = "TITULO_ID"))
+	private List<Titulos> titulos;
+
+	public Profissional() {
+
+	}
+
+	public Profissional(ProfissionalDto profissionalDto) {
+		BeanUtils.copyProperties(profissionalDto, this);
+	}
+
 }

@@ -6,4 +6,5 @@ import com.apicrea.crea.common.entities.Profissional;
 
 public interface ProfissionalRepository extends JpaRepository<Profissional, Long>{
 	boolean existsByEmail(String email);
+	boolean existsByCodigo(String codigo);
 }
