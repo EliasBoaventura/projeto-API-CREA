@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.apicrea.crea.common.enums.StatusRegistro;
-import com.apicrea.crea.common.enums.TipoRegistro;
+import com.apicrea.crea.common.enums.TipoCadastro;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -53,15 +53,15 @@ public class Profissional {
 	private String numeroCelular;
 
 	@Column(name = "DC_CODIGO", nullable = false, unique = true)
-	private String codido;
+	private String codigo;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DC_STATUS", nullable = false)
 	private StatusRegistro statusRegistro;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "DC_REGISTRO", nullable = false)
-	private TipoRegistro registro;
+	@Column(name = "DC_CADASTRO", nullable = false)
+	private TipoCadastro statusCadastro;
 
 	@Column(name = "DATA_VISTO")
 	@Temporal(TemporalType.DATE)
