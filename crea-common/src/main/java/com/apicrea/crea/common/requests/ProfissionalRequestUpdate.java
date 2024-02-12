@@ -7,37 +7,29 @@ import org.springframework.lang.NonNull;
 
 import com.apicrea.crea.common.enums.SituacaoCadastro;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ProfissionalRequest {
+@NoArgsConstructor
+public class ProfissionalRequestUpdate {
 
+	@NonNull
 	private Long id;
 
-	@NonNull
 	private String nome;
 
-	@NonNull
 	private String email;
 
-	@NonNull
 	private String senha;
 
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@NonNull
-	private LocalDate dataNascimento;
-
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	private LocalDate dataRegistro;
-
-	@NonNull
 	private String numeroCelular;
 
-	@NonNull
+	@Enumerated(EnumType.STRING)
 	private SituacaoCadastro statusCadastro;
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy")

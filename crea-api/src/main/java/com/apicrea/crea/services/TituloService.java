@@ -46,22 +46,20 @@ public class TituloService {
 
 		if (tituloRepository.existsByNome(tituloRequest.getNome())) {
 			throw new EntityExistsException("O título ja existe.");
-		}
-
-		else {
+		} else {
 			Titulo titulo = tituloRepository.save(new Titulo(tituloRequest));
 
 			return new TituloResponse(titulo);
 		}
-
 	}
 
-	public void deleteById(Long id) {
-		if (tituloRepository.findById(id) == null) {
-			throw new EntityNotFoundException("O título não existe.");
+	public void deleteById(Long tituloId) {
+		if (tituloRepository.findById(tituloId) != null) {
+			new EntityExistsException("Título não encontrado com o ID: " + tituloId);
 		}
 
-		tituloRepository.deleteById(id);
+
+		tituloRepository.deleteById(tituloId);
 	}
 
 }

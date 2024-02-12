@@ -38,7 +38,7 @@ public class ProfissionalResponse {
 	private SituacaoCadastro statusCadastro;
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	private LocalDate visto;
+	private LocalDate dataVisto;
 
 	private List<Titulo> titulos;
 
