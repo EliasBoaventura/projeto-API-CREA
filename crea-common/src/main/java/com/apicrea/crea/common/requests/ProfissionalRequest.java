@@ -5,11 +5,15 @@ import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 
-import com.apicrea.crea.common.enums.Cadastro;
+import com.apicrea.crea.common.enums.SituacaoCadastro;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProfissionalRequest {
 
 	private Long id;
@@ -35,10 +39,10 @@ public class ProfissionalRequest {
 	private String numeroCelular;
 
 	@NonNull
-	private Cadastro statusCadastro;
+	private SituacaoCadastro statusCadastro;
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@NonNull
-	private LocalDate visto;
+	private LocalDate dataVisto;
 
 }

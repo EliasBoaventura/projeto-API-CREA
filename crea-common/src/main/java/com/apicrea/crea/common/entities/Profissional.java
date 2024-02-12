@@ -1,19 +1,19 @@
 package com.apicrea.crea.common.entities;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
-import com.apicrea.crea.common.enums.Registro;
-import com.apicrea.crea.common.enums.Cadastro;
-import com.apicrea.crea.common.responses.dto.ProfissionalDto;
+import com.apicrea.crea.common.enums.SituacaoCadastro;
+import com.apicrea.crea.common.enums.SituacaoRegistro;
+import com.apicrea.crea.common.requests.ProfissionalRequest;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,7 +28,9 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "PROFISSIONAL")
-public class Profissional {
+public class Profissional implements Serializable {
+
+	private static final long serialVersionUID = 4641533145901514173L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,26 +62,26 @@ public class Profissional {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DC_STATUS")
-	private Registro statusRegistro;
+	private SituacaoRegistro statusRegistro;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "DC_CADASTRO")
-	private Cadastro statusCadastro;
+	private SituacaoCadastro statusCadastro;
 
 	@Column(name = "DATA_VISTO")
 	@Temporal(TemporalType.DATE)
-	private LocalDate visto;
+	private LocalDate dataVisto;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany
 	@JoinTable(name = "PROFISSIONAL_TITULO", joinColumns = @JoinColumn(name = "PROFISSIONAL_ID"), inverseJoinColumns = @JoinColumn(name = "TITULO_ID"))
-	private List<Titulos> titulos;
+	private List<Titulo> titulos;
 
 	public Profissional() {
 
 	}
 
-	public Profissional(ProfissionalDto profissionalDto) {
-		BeanUtils.copyProperties(profissionalDto, this);
+	public Profissional(ProfissionalRequest profissionalRequest) {
+		BeanUtils.copyProperties(profissionalRequest, this);
 	}
 
 }
