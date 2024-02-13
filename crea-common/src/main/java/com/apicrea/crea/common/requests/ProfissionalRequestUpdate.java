@@ -2,6 +2,8 @@ package com.apicrea.crea.common.requests;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.Email;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 
@@ -23,6 +25,7 @@ public class ProfissionalRequestUpdate {
 
 	private String nome;
 
+	@Email(message = "O e-mail não é válido")
 	private String email;
 
 	private String senha;

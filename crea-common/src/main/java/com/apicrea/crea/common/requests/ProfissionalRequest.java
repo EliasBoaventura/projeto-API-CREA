@@ -2,6 +2,8 @@ package com.apicrea.crea.common.requests;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.Email;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.NonNull;
 
@@ -22,6 +24,7 @@ public class ProfissionalRequest {
 	private String nome;
 
 	@NonNull
+	@Email(message = "O e-mail não é válido")
 	private String email;
 
 	@NonNull

@@ -53,8 +53,10 @@ public class ProfissionalService {
 					"O Profissional com o E-mail " + profissionalRequest.getEmail() + " já existe.");
 		}
 
-		if (profissionalRequest.getStatusCadastro().equals(SituacaoCadastro.REGISTRADO)) {
-			profissionalRequest.setDataVisto(null);
+		if (profissionalRequest.getStatusCadastro().equals(SituacaoCadastro.REGISTRADO)
+				&& profissionalRequest.getDataVisto() != null) {
+			throw new IllegalArgumentException(
+					"A data do visto não deve ser preenchida para a situação de cadastro Registrado.");
 		} else {
 			if (profissionalRequest.getDataVisto() == null) {
 				throw new IllegalArgumentException(
@@ -73,10 +75,8 @@ public class ProfissionalService {
 	// update
 	public void atualizarProfissional(ProfissionalRequestUpdate updateProfissionalRequest) {
 		verificarExistenciaProfissional(updateProfissionalRequest.getId());
-		Profissional profissional = profissionalRepository.findById(updateProfissionalRequest.getId()).get();
-		BeanUtils.copyProperties(updateProfissionalRequest, profissional,
-				getNullPropertyNames(updateProfissionalRequest));
 
+		Profissional profissional = profissionalRepository.findById(updateProfissionalRequest.getId()).get();
 		if (updateProfissionalRequest.getDataVisto() != null
 				&& updateProfissionalRequest.getStatusCadastro() == SituacaoCadastro.REGISTRADO) {
 			throw new IllegalArgumentException(
@@ -89,16 +89,19 @@ public class ProfissionalService {
 					"A data do visto deve ser preenchida para a situação de cadastro Visado.");
 		}
 
-		if (updateProfissionalRequest.getStatusCadastro() == SituacaoCadastro.REGISTRADO
-				&& profissional.getDataVisto() != null) {
+		if (updateProfissionalRequest.getStatusCadastro() == SituacaoCadastro.REGISTRADO) {
 			profissional.setDataVisto(null);
 		}
 
 		if (updateProfissionalRequest.getStatusCadastro() == SituacaoCadastro.VISADO
-				&& profissional.getDataVisto() == null) {
-			profissional.setDataVisto(updateProfissionalRequest.getDataVisto());
+				&& profissional.getDataVisto() != null) {
+			throw new IllegalArgumentException(
+					"A situação de cadastro não deve ser Visado para um profissional com data de visto não preenchida.");
 		}
 
+		profissional = profissionalRepository.findById(updateProfissionalRequest.getId()).get();
+		BeanUtils.copyProperties(updateProfissionalRequest, profissional,
+				getNullPropertyNames(updateProfissionalRequest));
 		profissional = profissionalRepository.save(profissional);
 	}
 
@@ -122,13 +125,19 @@ public class ProfissionalService {
 			throw new EntityNotFoundException("Esse profissional não existe.");
 		}
 
-		if (profissional.getStatusRegistro().equals(SituacaoRegistro.ATIVO)) {
+		if (profissional.getStatusRegistro() != null
+				&& profissional.getStatusRegistro().equals(SituacaoRegistro.ATIVO)) {
 			throw new EntityExistsException("Esse Profissional já está ativo");
 		}
 
 		if (profissional.getTitulos().isEmpty()) {
 			throw new IllegalArgumentException("Impossivel ATIVAR profissional sem titulo");
 		}
+
+		if (profissional.getCodigo().isEmpty()) {
+			throw new IllegalArgumentException("Impossivel ATIVAR profissional sem código");
+		}
+
 		profissional.setStatusRegistro(SituacaoRegistro.ATIVO);
 		profissional = profissionalRepository.save(profissional);
 
@@ -140,9 +149,11 @@ public class ProfissionalService {
 		verificarExistenciaProfissional(id);
 		Profissional profissional = profissionalRepository.findById(id).get();
 
-		if (profissional.getStatusRegistro().equals(SituacaoRegistro.INATIVO)) {
+		if (profissional.getStatusRegistro() != null
+				&& profissional.getStatusRegistro().equals(SituacaoRegistro.INATIVO)) {
 			throw new EntityExistsException("Esse Profissional já está inativo");
 		}
+
 		profissional.setStatusRegistro(SituacaoRegistro.INATIVO);
 		profissional = profissionalRepository.save(profissional);
 
@@ -152,12 +163,13 @@ public class ProfissionalService {
 	// Cancelar Profissional
 	public ProfissionalResponse cancelarProfissional(Long id) {
 		verificarExistenciaProfissional(id);
-
 		Profissional profissional = profissionalRepository.findById(id).get();
 
-		if (profissional.getStatusRegistro().equals(SituacaoRegistro.CANCELADO)) {
+		if (profissional.getStatusRegistro() != null
+				&& profissional.getStatusRegistro().equals(SituacaoRegistro.CANCELADO)) {
 			throw new EntityExistsException("Esse Profissional já está cancelado");
 		}
+
 		profissional.setStatusRegistro(SituacaoRegistro.CANCELADO);
 		profissional = profissionalRepository.save(profissional);
 
