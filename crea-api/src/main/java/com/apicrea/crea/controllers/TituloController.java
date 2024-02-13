@@ -33,16 +33,19 @@ public class TituloController {
 
 	@GetMapping
 	public List<Titulo> findAll() {
+
 		return tituloService.findAll();
 	}
 
 	@GetMapping("/{id}")
 	public TituloResponse findById(@PathVariable Long id) {
+
 		return tituloService.findById(id);
 	}
 
 	@PutMapping()
 	public TituloResponse update(@RequestBody TituloRequest tituloRequest) {
+
 		return tituloService.update(tituloRequest);
 	}
 

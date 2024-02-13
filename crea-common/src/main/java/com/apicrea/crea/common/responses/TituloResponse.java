@@ -24,7 +24,5 @@ public class TituloResponse {
 
 	public TituloResponse(TituloRequest tituloRequest) {
 		BeanUtils.copyProperties(tituloRequest, this);
-
 	}
-
 }

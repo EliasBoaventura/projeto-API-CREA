@@ -74,7 +74,6 @@ public class ProfissionalService {
 	public void atualizarProfissional(ProfissionalRequestUpdate updateProfissionalRequest) {
 		verificarExistenciaProfissional(updateProfissionalRequest.getId());
 		Profissional profissional = profissionalRepository.findById(updateProfissionalRequest.getId()).get();
-
 		BeanUtils.copyProperties(updateProfissionalRequest, profissional,
 				getNullPropertyNames(updateProfissionalRequest));
 
@@ -106,12 +105,12 @@ public class ProfissionalService {
 	// delete
 	public void deleteById(Long id) {
 		verificarExistenciaProfissional(id);
-
 		profissionalRepository.delete(profissionalRepository.findById(id).get());
 	}
 
 	// *** listar TODOS
 	public List<Profissional> findAll() {
+
 		return profissionalRepository.findAll();
 	}
 
@@ -130,7 +129,6 @@ public class ProfissionalService {
 		if (profissional.getTitulos().isEmpty()) {
 			throw new EntityNotFoundException("Impossivel ATIVAR profissional sem titulo");
 		}
-
 		profissional.setStatusRegistro(SituacaoRegistro.ATIVO);
 		profissional = profissionalRepository.save(profissional);
 
@@ -140,15 +138,12 @@ public class ProfissionalService {
 	// Desativar Profissional
 	public ProfissionalResponse desativarProfissional(Long id) {
 		verificarExistenciaProfissional(id);
-
-		Profissional profissional = new Profissional();
+		Profissional profissional = profissionalRepository.findById(id).get();
 
 		if (profissional.getStatusRegistro().equals(SituacaoRegistro.INATIVO)) {
 			throw new EntityExistsException("Esse Profissional já está inativo");
 		}
-
 		profissional.setStatusRegistro(SituacaoRegistro.INATIVO);
-
 		profissional = profissionalRepository.save(profissional);
 
 		return new ProfissionalResponse(profissional);
@@ -158,14 +153,12 @@ public class ProfissionalService {
 	public ProfissionalResponse cancelarProfissional(Long id) {
 		verificarExistenciaProfissional(id);
 
-		Profissional profissional = new Profissional();
+		Profissional profissional = profissionalRepository.findById(id).get();
 
 		if (profissional.getStatusRegistro().equals(SituacaoRegistro.CANCELADO)) {
 			throw new EntityExistsException("Esse Profissional já está cancelado");
 		}
-
 		profissional.setStatusRegistro(SituacaoRegistro.CANCELADO);
-
 		profissional = profissionalRepository.save(profissional);
 
 		return new ProfissionalResponse(profissional);
@@ -210,20 +203,19 @@ public class ProfissionalService {
 	}
 
 	// ***Remover Título
-	public void removerTituloProfissao(Long idProfissional, Long tituloId) {
-		verificarExistenciaDados(idProfissional, tituloId);
-
-		Profissional profissional = profissionalRepository.findById(idProfissional).get();
-		profissional.getTitulos().removeIf(t -> t.getId().equals(tituloId));
-
+	public void removerTituloProfissao(ProfissionalTituloRequest profissionalTituloRequest) {
+		verificarExistenciaDados(profissionalTituloRequest.getIdProfissional(),
+				profissionalTituloRequest.getIdTitulo());
+		Profissional profissional = profissionalRepository.findById(profissionalTituloRequest.getIdProfissional())
+				.get();
+		profissional.getTitulos().removeIf(t -> t.getId().equals(profissionalTituloRequest.getIdTitulo()));
 		profissional = profissionalRepository.save(profissional);
+
 		if (profissional.getTitulos().isEmpty()) {
 			profissional.setStatusRegistro(SituacaoRegistro.INATIVO);
 			profissional.setCodigo(null);
 			profissional = profissionalRepository.save(profissional);
 		}
-
-
 	}
 
 	private String geradorCodigo(Long idProfissional) {
@@ -274,6 +266,7 @@ public class ProfissionalService {
 			}
 		}
 		String[] result = new String[emptyNames.size()];
+
 		return emptyNames.toArray(result);
 	}
 }

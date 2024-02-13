@@ -9,7 +9,7 @@ public class ProfissionalTituloRequest {
 
 	@NonNull
 	private Long idProfissional;
-	
+
 	@NonNull
 	private Long idTitulo;
 }

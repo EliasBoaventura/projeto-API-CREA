@@ -32,6 +32,7 @@ public class ProfissionalController {
 	@PostMapping("/criar")
 	public ResponseEntity<ProfissionalResponse> createprofissional(
 			@RequestBody ProfissionalRequest profissionalRequest) {
+
 		return ResponseEntity.ok(profissionalService.create(profissionalRequest));
 	}
 
@@ -39,6 +40,7 @@ public class ProfissionalController {
 	@GetMapping("/{id}")
 	public ResponseEntity<ProfissionalResponse> findById(@PathVariable Long id) {
 		ProfissionalResponse profissionalResponse = profissionalService.finbyid(id);
+
 		return ResponseEntity.ok(profissionalResponse);
 	}
 
@@ -46,6 +48,7 @@ public class ProfissionalController {
 	@PutMapping("/atualizar")
 	public ResponseEntity<Void> atualizarProfissional(@RequestBody ProfissionalRequestUpdate updateProfissional) {
 		profissionalService.atualizarProfissional(updateProfissional);
+
 		return ResponseEntity.noContent().build();
 	}
 
@@ -53,6 +56,7 @@ public class ProfissionalController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletaProfissional(@PathVariable Long id) {
 		profissionalService.deleteById(id);
+
 		return ResponseEntity.noContent().build();
 
 	}
@@ -61,6 +65,7 @@ public class ProfissionalController {
 	@GetMapping("/listar")
 	public ResponseEntity<List<Profissional>> findAllProfissionais() {
 		List<Profissional> profissionais = profissionalService.findAll();
+
 		return new ResponseEntity<>(profissionais, HttpStatus.OK);
 	}
 
@@ -68,6 +73,7 @@ public class ProfissionalController {
 	@PutMapping("/{id}/ativar")
 	public ResponseEntity<ProfissionalResponse> ativarProfissional(@PathVariable Long id) {
 		ProfissionalResponse response = profissionalService.ativarProfissional(id);
+
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
@@ -75,6 +81,7 @@ public class ProfissionalController {
 	@PutMapping("/{id}/desativar")
 	public ResponseEntity<ProfissionalResponse> desativarProfissional(@PathVariable Long id) {
 		ProfissionalResponse response = profissionalService.desativarProfissional(id);
+
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
@@ -82,6 +89,7 @@ public class ProfissionalController {
 	@PutMapping("/{id}/cancelar")
 	public ResponseEntity<ProfissionalResponse> cancelarProfissional(@PathVariable Long id) {
 		ProfissionalResponse response = profissionalService.cancelarProfissional(id);
+
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
@@ -89,13 +97,16 @@ public class ProfissionalController {
 	@PutMapping("/adicionar-titulo")
 	public ResponseEntity<ProfissionalResponse> adicionarTitulo(
 			@RequestBody ProfissionalTituloRequest profissionalTitulosResponse) {
+
 		return ResponseEntity.ok(profissionalService.adcionarTitulo(profissionalTitulosResponse));
 	}
 
 	// deletar titulo
-	@DeleteMapping("/{idProfissional}/titulos/{tituloId}")
-	public ResponseEntity<Void> removerTituloProfissao(@PathVariable Long idProfissional, @PathVariable Long tituloId) {
-		profissionalService.removerTituloProfissao(idProfissional, tituloId);
+	@DeleteMapping("/titulo/remover")
+	public ResponseEntity<Void> removerTituloProfissao(
+			@RequestBody ProfissionalTituloRequest profissionalTituloRequest) {
+		profissionalService.removerTituloProfissao(profissionalTituloRequest);
+
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

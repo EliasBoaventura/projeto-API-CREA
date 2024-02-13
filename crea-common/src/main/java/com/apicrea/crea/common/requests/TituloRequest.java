@@ -20,6 +20,7 @@ public class TituloRequest {
 	private String nome;
 
 	public TituloRequest() {
+
 	}
 
 	public TituloRequest(Titulo titulo) {
@@ -29,5 +30,4 @@ public class TituloRequest {
 	public TituloRequest(TituloResponse tituloResponse) {
 		BeanUtils.copyProperties(tituloResponse, this);
 	}
-
 }

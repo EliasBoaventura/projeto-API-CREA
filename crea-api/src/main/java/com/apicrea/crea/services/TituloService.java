@@ -21,7 +21,7 @@ public class TituloService {
 
 	public TituloResponse create(TituloRequest tituloRequest) {
 		if (tituloRepository.existsByNome(tituloRequest.getNome())) {
-			throw new EntityExistsException("O título ja existe.");
+			throw new EntityExistsException("O título já existe.");
 		}
 
 		Titulo titulo = tituloRepository.save(new Titulo(tituloRequest));
@@ -30,22 +30,25 @@ public class TituloService {
 	}
 
 	public List<Titulo> findAll() {
+		if (tituloRepository.findAll().isEmpty()) {
+			throw new EntityExistsException("Não existe títulos cadastrados.");
+		}
 		return tituloRepository.findAll();
 	}
 
-	public TituloResponse findById(Long id) {
-		TituloRequest tituloRequest = new TituloRequest(tituloRepository.findById(id).get());
+	public TituloResponse findById(Long tituloId) {
+		verificaTitulo(tituloId);
+
+		TituloRequest tituloRequest = new TituloRequest(tituloRepository.findById(tituloId).get());
 
 		return new TituloResponse(tituloRequest);
 	}
 
 	public TituloResponse update(TituloRequest tituloRequest) {
-		if (tituloRepository.findById(tituloRequest.getId()) == null) {
-			throw new EntityNotFoundException("O título não existe.");
-		}
+		verificaTitulo(tituloRequest.getId());
 
 		if (tituloRepository.existsByNome(tituloRequest.getNome())) {
-			throw new EntityExistsException("O título ja existe.");
+			throw new EntityExistsException("O título já existe.");
 		} else {
 			Titulo titulo = tituloRepository.save(new Titulo(tituloRequest));
 
@@ -54,12 +57,19 @@ public class TituloService {
 	}
 
 	public void deleteById(Long tituloId) {
-		if (tituloRepository.findById(tituloId) != null) {
-			new EntityExistsException("Título não encontrado com o ID: " + tituloId);
+		verificaTitulo(tituloId);
+		if (tituloRepository.verificaTituloEmUso(tituloId) > 0) {
+			throw new EntityNotFoundException(
+					"Este título não pode ser removido, pois está vinculado a um profissional.");
 		}
 
-
 		tituloRepository.deleteById(tituloId);
+	}
+
+	private void verificaTitulo(Long tituloId) {
+		if (tituloRepository.findById(tituloId) != null) {
+			new EntityExistsException("Título não encontrado com o ID: " + tituloId + ".");
+		}
 	}
 
 }
