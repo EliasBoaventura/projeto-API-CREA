@@ -12,7 +12,7 @@ public class TituloResponse {
 
 	private Long Id;
 
-	private String nome;
+	private String descricao;
 
 	public TituloResponse() {
 

@@ -18,6 +18,8 @@ import com.apicrea.crea.common.requests.TituloRequest;
 import com.apicrea.crea.common.responses.TituloResponse;
 import com.apicrea.crea.services.TituloService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/titulos")
 public class TituloController {
@@ -25,30 +27,35 @@ public class TituloController {
 	@Autowired
 	private TituloService tituloService;
 
+	@Operation(summary = "Cria um título.")
 	@PostMapping
 	public ResponseEntity<TituloResponse> create(@RequestBody TituloRequest tituloRequest) {
 
 		return ResponseEntity.ok(tituloService.create(tituloRequest));
 	}
 
+	@Operation(summary = "Lista todos os títulos.")
 	@GetMapping
 	public List<Titulo> findAll() {
 
 		return tituloService.findAll();
 	}
 
+	@Operation(summary = "Busca um título por ID.")
 	@GetMapping("/{id}")
 	public TituloResponse findById(@PathVariable Long id) {
 
 		return tituloService.findById(id);
 	}
 
+	@Operation(summary = "Atualiza um título.")
 	@PutMapping()
 	public TituloResponse update(@RequestBody TituloRequest tituloRequest) {
 
 		return tituloService.update(tituloRequest);
 	}
 
+	@Operation(summary = "Deleta um título.")
 	@DeleteMapping("/{id}")
 	public void deleteById(@PathVariable Long id) {
 		tituloService.deleteById(id);

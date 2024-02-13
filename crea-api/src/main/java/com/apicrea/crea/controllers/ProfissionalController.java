@@ -21,6 +21,8 @@ import com.apicrea.crea.common.requests.ProfissionalTituloRequest;
 import com.apicrea.crea.common.responses.ProfissionalResponse;
 import com.apicrea.crea.services.ProfissionalService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/profissionais")
 public class ProfissionalController {
@@ -28,7 +30,7 @@ public class ProfissionalController {
 	@Autowired
 	private ProfissionalService profissionalService;
 
-	// creat
+	@Operation(summary = "Cria um profissional")
 	@PostMapping("/criar")
 	public ResponseEntity<ProfissionalResponse> createprofissional(
 			@RequestBody ProfissionalRequest profissionalRequest) {
@@ -36,7 +38,7 @@ public class ProfissionalController {
 		return ResponseEntity.ok(profissionalService.create(profissionalRequest));
 	}
 
-	// read
+	@Operation(summary = "Busca um profissional por ID")
 	@GetMapping("/{id}")
 	public ResponseEntity<ProfissionalResponse> findById(@PathVariable Long id) {
 		ProfissionalResponse profissionalResponse = profissionalService.finbyid(id);
@@ -44,7 +46,7 @@ public class ProfissionalController {
 		return ResponseEntity.ok(profissionalResponse);
 	}
 
-	// update
+	@Operation(summary = "Atualiza um profissional")
 	@PutMapping("/atualizar")
 	public ResponseEntity<Void> atualizarProfissional(@RequestBody ProfissionalRequestUpdate updateProfissional) {
 		profissionalService.atualizarProfissional(updateProfissional);
@@ -52,7 +54,7 @@ public class ProfissionalController {
 		return ResponseEntity.noContent().build();
 	}
 
-	// delete
+	@Operation(summary = "Deleta um profissional por ID")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletaProfissional(@PathVariable Long id) {
 		profissionalService.deleteById(id);
@@ -61,7 +63,7 @@ public class ProfissionalController {
 
 	}
 
-	// *** lista TODOS
+	@Operation(summary = "Lista todos os profissionais")
 	@GetMapping("/listar")
 	public ResponseEntity<List<Profissional>> findAllProfissionais() {
 		List<Profissional> profissionais = profissionalService.findAll();
@@ -69,23 +71,23 @@ public class ProfissionalController {
 		return new ResponseEntity<>(profissionais, HttpStatus.OK);
 	}
 
-	// ativa o profissional
-	@PutMapping("/{id}/ativar")
+	@Operation(summary = "Ativa um profissional")
+	@PutMapping("/ativar/{id}")
 	public ResponseEntity<ProfissionalResponse> ativarProfissional(@PathVariable Long id) {
 		ProfissionalResponse response = profissionalService.ativarProfissional(id);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	// desativa o profissional
-	@PutMapping("/{id}/desativar")
+	@Operation(summary = "Desativa um profissional por ID")
+	@PutMapping("/desativar/{id}")
 	public ResponseEntity<ProfissionalResponse> desativarProfissional(@PathVariable Long id) {
 		ProfissionalResponse response = profissionalService.desativarProfissional(id);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	// cancela o profissional
+	@Operation(summary = "Cancela um profissional por ID")
 	@PutMapping("/{id}/cancelar")
 	public ResponseEntity<ProfissionalResponse> cancelarProfissional(@PathVariable Long id) {
 		ProfissionalResponse response = profissionalService.cancelarProfissional(id);
@@ -93,15 +95,15 @@ public class ProfissionalController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	// adiciona o titulo
+	@Operation(summary = "Adiciona um título a um profissional")
 	@PutMapping("/adicionar-titulo")
-	public ResponseEntity<ProfissionalResponse> adicionarTitulo(
+	public ResponseEntity<ProfissionalResponse> adicionarTituloAoProfissional(
 			@RequestBody ProfissionalTituloRequest profissionalTitulosResponse) {
 
-		return ResponseEntity.ok(profissionalService.adcionarTitulo(profissionalTitulosResponse));
+		return ResponseEntity.ok(profissionalService.adcionarTituloAoProfissional(profissionalTitulosResponse));
 	}
 
-	// deletar titulo
+	@Operation(summary = "Remove um titulo de um profissional")
 	@DeleteMapping("/titulo/remover")
 	public ResponseEntity<Void> removerTituloProfissao(
 			@RequestBody ProfissionalTituloRequest profissionalTituloRequest) {

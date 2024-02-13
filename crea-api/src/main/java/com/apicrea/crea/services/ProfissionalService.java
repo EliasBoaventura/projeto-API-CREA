@@ -57,7 +57,7 @@ public class ProfissionalService {
 			profissionalRequest.setDataVisto(null);
 		} else {
 			if (profissionalRequest.getDataVisto() == null) {
-				throw new EntityExistsException(
+				throw new IllegalArgumentException(
 						"A data do visto deve ser preenchida para a situação de cadastro Visado.");
 			}
 		}
@@ -79,13 +79,13 @@ public class ProfissionalService {
 
 		if (updateProfissionalRequest.getDataVisto() != null
 				&& updateProfissionalRequest.getStatusCadastro() == SituacaoCadastro.REGISTRADO) {
-			throw new EntityNotFoundException(
+			throw new IllegalArgumentException(
 					"A data do visto não deve ser preenchida para a situação de cadastro Registrado.");
 		}
 
 		if (updateProfissionalRequest.getDataVisto() == null
 				&& updateProfissionalRequest.getStatusCadastro() == SituacaoCadastro.VISADO) {
-			throw new EntityNotFoundException(
+			throw new IllegalArgumentException(
 					"A data do visto deve ser preenchida para a situação de cadastro Visado.");
 		}
 
@@ -127,7 +127,7 @@ public class ProfissionalService {
 		}
 
 		if (profissional.getTitulos().isEmpty()) {
-			throw new EntityNotFoundException("Impossivel ATIVAR profissional sem titulo");
+			throw new IllegalArgumentException("Impossivel ATIVAR profissional sem titulo");
 		}
 		profissional.setStatusRegistro(SituacaoRegistro.ATIVO);
 		profissional = profissionalRepository.save(profissional);
@@ -165,7 +165,7 @@ public class ProfissionalService {
 	}
 
 	// Adicionar Título
-	public ProfissionalResponse adcionarTitulo(ProfissionalTituloRequest profissionalTituloRequest) {
+	public ProfissionalResponse adcionarTituloAoProfissional(ProfissionalTituloRequest profissionalTituloRequest) {
 		Profissional profissional = profissionalRepository.findById(profissionalTituloRequest.getIdProfissional())
 				.get();
 		if (profissional == null) {
@@ -238,7 +238,7 @@ public class ProfissionalService {
 
 	private void verificarExistenciaTitulo(Long idTitulo) {
 		if (tituloService.findById(idTitulo) == null) {
-			throw new EntityExistsException("Esse titulo não existe.");
+			throw new EntityNotFoundException("Esse titulo não existe.");
 		}
 	}
 

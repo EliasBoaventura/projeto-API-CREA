@@ -27,8 +27,8 @@ public class Titulo implements Serializable {
 	@Column(name = "ID")
 	private Long Id;
 
-	@Column(name = "DC_NOME", nullable = false, unique = true)
-	private String nome;
+	@Column(name = "DC_DESCRICAO", nullable = false, unique = true)
+	private String descricao;
 
 	public Titulo() {
 

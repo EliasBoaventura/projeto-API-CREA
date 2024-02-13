@@ -20,7 +20,7 @@ public class TituloService {
 	private TituloRepository tituloRepository;
 
 	public TituloResponse create(TituloRequest tituloRequest) {
-		if (tituloRepository.existsByNome(tituloRequest.getNome())) {
+		if (tituloRepository.existsByDescricao(tituloRequest.getDescricao())) {
 			throw new EntityExistsException("O título já existe.");
 		}
 
@@ -31,7 +31,7 @@ public class TituloService {
 
 	public List<Titulo> findAll() {
 		if (tituloRepository.findAll().isEmpty()) {
-			throw new EntityExistsException("Não existe títulos cadastrados.");
+			throw new EntityNotFoundException("Não existe títulos cadastrados.");
 		}
 		return tituloRepository.findAll();
 	}
@@ -47,7 +47,7 @@ public class TituloService {
 	public TituloResponse update(TituloRequest tituloRequest) {
 		verificaTitulo(tituloRequest.getId());
 
-		if (tituloRepository.existsByNome(tituloRequest.getNome())) {
+		if (tituloRepository.existsByDescricao(tituloRequest.getDescricao())) {
 			throw new EntityExistsException("O título já existe.");
 		} else {
 			Titulo titulo = tituloRepository.save(new Titulo(tituloRequest));
@@ -68,7 +68,7 @@ public class TituloService {
 
 	private void verificaTitulo(Long tituloId) {
 		if (tituloRepository.findById(tituloId) != null) {
-			new EntityExistsException("Título não encontrado com o ID: " + tituloId + ".");
+			new EntityNotFoundException("Título não encontrado com o ID: " + tituloId + ".");
 		}
 	}
 

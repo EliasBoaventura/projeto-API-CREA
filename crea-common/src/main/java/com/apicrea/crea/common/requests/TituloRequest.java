@@ -17,7 +17,7 @@ public class TituloRequest {
 	private Long id;
 
 	@NonNull
-	private String nome;
+	private String descricao;
 
 	public TituloRequest() {
 
