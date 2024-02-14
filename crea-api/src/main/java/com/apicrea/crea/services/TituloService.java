@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.apicrea.crea.common.entities.Titulo;
 import com.apicrea.crea.common.requests.TituloRequest;
 import com.apicrea.crea.common.responses.TituloResponse;
+import com.apicrea.crea.common.utils.ConversorObjeto;
 import com.apicrea.crea.repositories.TituloRepository;
 
 import jakarta.persistence.EntityExistsException;
@@ -25,52 +26,46 @@ public class TituloService {
 			throw new EntityExistsException("O título já existe.");
 		}
 
-		Titulo titulo = tituloRepository.save(new Titulo(tituloRequest));
+		Titulo titulo = tituloRepository.save(ConversorObjeto.converter(tituloRequest, Titulo.class));
 
-		return new TituloResponse(titulo);
+		return ConversorObjeto.converter(titulo, TituloResponse.class);
 	}
 
 	public List<Titulo> findAll() {
-		if (tituloRepository.findAll().isEmpty()) {
-			throw new EntityNotFoundException("Não existe títulos cadastrados.");
-		}
 		return tituloRepository.findAll();
 	}
 
 	public TituloResponse findById(Long tituloId) {
-		verificarExistenciaTitulo(tituloId);
+		Titulo titulo = carregarTitulo(tituloId);
 
-		TituloRequest tituloRequest = new TituloRequest(tituloRepository.findById(tituloId).get());
-
-		return new TituloResponse(tituloRequest);
+		return ConversorObjeto.converter(titulo, TituloResponse.class);
 	}
 
 	public TituloResponse update(TituloRequest tituloRequest) {
-		verificarExistenciaTitulo(tituloRequest.getId());
+		Titulo titulo = carregarTitulo(tituloRequest.getId());
 
 		if (tituloRepository.existsByDescricao(tituloRequest.getDescricao())) {
 			throw new EntityExistsException("O título já existe.");
 		} else {
-			Titulo titulo = tituloRepository.save(new Titulo(tituloRequest));
+			titulo.setDescricao(titulo.getDescricao());
+			titulo = tituloRepository.save(titulo);
 
-			return new TituloResponse(titulo);
+			return ConversorObjeto.converter(titulo, TituloResponse.class);
 		}
 	}
 
 	public void deleteById(Long tituloId) {
-		verificarExistenciaTitulo(tituloId);
+		Titulo titulo = carregarTitulo(tituloId);
 		if (tituloRepository.verificaTituloEmUso(tituloId) > 0) {
-			throw new EntityNotFoundException(
-					"Este título não pode ser removido, pois está vinculado a um profissional.");
+			throw new EntityNotFoundException("Este título não pode ser removido, pois está vinculado a um profissional.");
 		}
 
-		tituloRepository.deleteById(tituloId);
+		tituloRepository.delete(titulo);
 	}
 
-	private void verificarExistenciaTitulo(Long idTitulo) {
-		Optional<Titulo> tituOptional = tituloRepository.findById(idTitulo);
-		if (tituOptional.isEmpty()) {
-			throw new EntityNotFoundException("Esse título não existe.");
-		}
+	public Titulo carregarTitulo(Long idTitulo) {
+		Optional<Titulo> titulo = tituloRepository.findById(idTitulo);
+		
+		return titulo.orElseThrow(() -> new EntityNotFoundException("Esse título não existe."));
 	}
 }

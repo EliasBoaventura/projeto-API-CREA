@@ -4,12 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
-
 import com.apicrea.crea.common.enums.SituacaoCadastro;
 import com.apicrea.crea.common.enums.SituacaoRegistro;
-import com.apicrea.crea.common.requests.ProfissionalRequest;
-import com.apicrea.crea.common.requests.ProfissionalRequestUpdate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -76,17 +72,4 @@ public class Profissional implements Serializable {
 	@ManyToMany
 	@JoinTable(name = "PROFISSIONAL_TITULO", joinColumns = @JoinColumn(name = "PROFISSIONAL_ID"), inverseJoinColumns = @JoinColumn(name = "TITULO_ID"))
 	private List<Titulo> titulos;
-	
-	public Profissional() {
-
-	}
-
-	public Profissional(ProfissionalRequest profissionalRequest) {
-		BeanUtils.copyProperties(profissionalRequest, this);
-	}
-
-	public Profissional(ProfissionalRequestUpdate profissionalRequestUpdate) {
-		BeanUtils.copyProperties(profissionalRequestUpdate, this);
-	}
-
 }

@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProfissionalRequestUpdate {
+public class ProfissionalUpdateRequest {
 
 	@NonNull
 	private Long id;
@@ -37,5 +37,4 @@ public class ProfissionalRequestUpdate {
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataVisto;
-
 }

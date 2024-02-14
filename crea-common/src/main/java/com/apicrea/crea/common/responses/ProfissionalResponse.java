@@ -3,14 +3,11 @@ package com.apicrea.crea.common.responses;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.apicrea.crea.common.entities.Profissional;
 import com.apicrea.crea.common.entities.Titulo;
 import com.apicrea.crea.common.enums.SituacaoCadastro;
 import com.apicrea.crea.common.enums.SituacaoRegistro;
-import com.apicrea.crea.common.requests.ProfissionalRequest;
 
 import lombok.Data;
 
@@ -44,13 +41,5 @@ public class ProfissionalResponse {
 
 	public ProfissionalResponse() {
 
-	}
-
-	public ProfissionalResponse(Profissional profissional) {
-		BeanUtils.copyProperties(profissional, this);
-	}
-
-	public ProfissionalResponse(ProfissionalRequest profissionalRequest) {
-		BeanUtils.copyProperties(profissionalRequest, this);
 	}
 }
