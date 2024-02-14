@@ -1,7 +1,5 @@
 # README - Projeto Estágio Full Stack Java - CREA 🚀
 
-Este projeto consiste em dois componentes principais: um modelo de dados (backend) e uma API (backend) para interagir com esses dados. Foi desenvolvido como parte do teste para a vaga de estágio full stack Java no Conselho Regional de Engenharia e Agronomia (CREA). O projeto utiliza PostgreSQL como banco de dados e é desenvolvido em Java com o framework Spring Boot. Além disso, foi implementado o Swagger para facilitar a visualização dos casos de uso da API.
-
 ## Descrição 📝
 
 Este projeto consiste em dois componentes principais: um modelo de dados (backend) e uma API (backend) para interagir com esses dados. Foi desenvolvido como parte do teste para a vaga de estágio full stack Java no Conselho Regional de Engenharia e Agronomia (CREA). O projeto utiliza PostgreSQL como banco de dados e é desenvolvido em Java com o framework Spring Boot. Além disso, foi implementado o Swagger para facilitar a visualização dos casos de uso da API.
