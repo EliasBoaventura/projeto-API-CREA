@@ -1,5 +1,6 @@
 package com.apicrea.crea.controllers;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ import com.apicrea.crea.common.responses.ProfissionalResponse;
 import com.apicrea.crea.services.ProfissionalService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/profissionais")
@@ -34,81 +37,152 @@ public class ProfissionalController {
 	@PostMapping("/criar")
 	public ResponseEntity<ProfissionalResponse> createprofissional(
 			@RequestBody ProfissionalRequest profissionalRequest) {
+		try {
+			return ResponseEntity.ok(profissionalService.create(profissionalRequest));
+		} catch (EntityExistsException e) {
 
-		return ResponseEntity.ok(profissionalService.create(profissionalRequest));
+			return ResponseEntity.status(HttpStatus.CONFLICT).header("X-Error-Message", e.getMessage()).body(null);
+		} catch (IllegalArgumentException e) {
+
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("X-Error-Message", e.getMessage()).body(null);
+		}
 	}
 
 	@Operation(summary = "Busca um profissional por ID")
 	@GetMapping("/{id}")
 	public ResponseEntity<ProfissionalResponse> findById(@PathVariable Long id) {
-		ProfissionalResponse profissionalResponse = profissionalService.finbyid(id);
+		try {
+			ProfissionalResponse profissionalResponse = profissionalService.finbyid(id);
 
-		return ResponseEntity.ok(profissionalResponse);
+			return ResponseEntity.ok(profissionalResponse);
+		} catch (EntityNotFoundException e) {
+
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).header("X-Error-Message", e.getMessage()).body(null);
+		}
 	}
 
 	@Operation(summary = "Atualiza um profissional")
 	@PutMapping("/atualizar")
 	public ResponseEntity<Void> atualizarProfissional(@RequestBody ProfissionalRequestUpdate updateProfissional) {
-		profissionalService.atualizarProfissional(updateProfissional);
+		try {
+			profissionalService.atualizarProfissional(updateProfissional);
 
-		return ResponseEntity.noContent().build();
+			return ResponseEntity.noContent().build();
+		} catch (EntityNotFoundException e) {
+
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).header("X-Error-Message", e.getMessage()).body(null);
+		} catch (IllegalArgumentException e) {
+
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("X-Error-Message", e.getMessage()).body(null);
+		}
 	}
 
 	@Operation(summary = "Deleta um profissional por ID")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletaProfissional(@PathVariable Long id) {
-		profissionalService.deleteById(id);
+		try {
+			profissionalService.deleteById(id);
 
-		return ResponseEntity.noContent().build();
+			return ResponseEntity.noContent().build();
+		} catch (EntityNotFoundException e) {
+
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).header("X-Error-Message", e.getMessage()).body(null);
+		}
 
 	}
 
 	@Operation(summary = "Lista todos os profissionais")
 	@GetMapping("/listar")
 	public ResponseEntity<List<Profissional>> findAllProfissionais() {
-		List<Profissional> profissionais = profissionalService.findAll();
+		try {
+			List<Profissional> profissionais = profissionalService.findAll();
 
-		return new ResponseEntity<>(profissionais, HttpStatus.OK);
+			return new ResponseEntity<>(profissionais, HttpStatus.OK);
+		} catch (EntityNotFoundException e) {
+
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).header("X-Error-Message", e.getMessage())
+					.body(Collections.emptyList());
+		}
 	}
 
 	@Operation(summary = "Ativa um profissional")
 	@PutMapping("/ativar/{id}")
 	public ResponseEntity<ProfissionalResponse> ativarProfissional(@PathVariable Long id) {
-		ProfissionalResponse response = profissionalService.ativarProfissional(id);
+		try {
+			ProfissionalResponse response = profissionalService.ativarProfissional(id);
 
-		return new ResponseEntity<>(response, HttpStatus.OK);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (EntityNotFoundException e) {
+
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).header("X-Error-Message", e.getMessage()).body(null);
+		} catch (EntityExistsException e) {
+
+			return ResponseEntity.status(HttpStatus.CONFLICT).header("X-Error-Message", e.getMessage()).body(null);
+		} catch (IllegalArgumentException e) {
+
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).header("X-Error-Message", e.getMessage()).body(null);
+		}
 	}
 
 	@Operation(summary = "Desativa um profissional por ID")
 	@PutMapping("/desativar/{id}")
 	public ResponseEntity<ProfissionalResponse> desativarProfissional(@PathVariable Long id) {
-		ProfissionalResponse response = profissionalService.desativarProfissional(id);
+		try {
+			ProfissionalResponse response = profissionalService.desativarProfissional(id);
 
-		return new ResponseEntity<>(response, HttpStatus.OK);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (EntityNotFoundException e) {
+
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).header("X-Error-Message", e.getMessage()).body(null);
+		} catch (EntityExistsException e) {
+
+			return ResponseEntity.status(HttpStatus.CONFLICT).header("X-Error-Message", e.getMessage()).body(null);
+		}
 	}
 
 	@Operation(summary = "Cancela um profissional por ID")
 	@PutMapping("/{id}/cancelar")
 	public ResponseEntity<ProfissionalResponse> cancelarProfissional(@PathVariable Long id) {
-		ProfissionalResponse response = profissionalService.cancelarProfissional(id);
+		try {
+			ProfissionalResponse response = profissionalService.cancelarProfissional(id);
 
-		return new ResponseEntity<>(response, HttpStatus.OK);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} catch (EntityNotFoundException e) {
+
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).header("X-Error-Message", e.getMessage()).body(null);
+		} catch (EntityExistsException e) {
+
+			return ResponseEntity.status(HttpStatus.CONFLICT).header("X-Error-Message", e.getMessage()).body(null);
+		}
 	}
 
 	@Operation(summary = "Adiciona um título a um profissional")
 	@PutMapping("/adicionar-titulo")
 	public ResponseEntity<ProfissionalResponse> adicionarTituloAoProfissional(
 			@RequestBody ProfissionalTituloRequest profissionalTitulosResponse) {
+		try {
+			return ResponseEntity.ok(profissionalService.adcionarTituloAoProfissional(profissionalTitulosResponse));
+		} catch (EntityNotFoundException e) {
 
-		return ResponseEntity.ok(profissionalService.adcionarTituloAoProfissional(profissionalTitulosResponse));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).header("X-Error-Message", e.getMessage()).body(null);
+		} catch (EntityExistsException e) {
+
+			return ResponseEntity.status(HttpStatus.CONFLICT).header("X-Error-Message", e.getMessage()).body(null);
+		}
 	}
 
 	@Operation(summary = "Remove um titulo de um profissional")
 	@DeleteMapping("/titulo/remover")
 	public ResponseEntity<Void> removerTituloProfissao(
 			@RequestBody ProfissionalTituloRequest profissionalTituloRequest) {
-		profissionalService.removerTituloProfissao(profissionalTituloRequest);
+		try {
+			profissionalService.removerTituloProfissao(profissionalTituloRequest);
 
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} catch (EntityNotFoundException e) {
+
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).header("X-Error-Message", e.getMessage()).body(null);
+		}
+
 	}
 }

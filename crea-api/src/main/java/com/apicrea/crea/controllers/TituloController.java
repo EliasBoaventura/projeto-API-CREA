@@ -1,8 +1,10 @@
 package com.apicrea.crea.controllers;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,8 @@ import com.apicrea.crea.common.responses.TituloResponse;
 import com.apicrea.crea.services.TituloService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/titulos")
@@ -30,34 +34,68 @@ public class TituloController {
 	@Operation(summary = "Cria um título.")
 	@PostMapping
 	public ResponseEntity<TituloResponse> create(@RequestBody TituloRequest tituloRequest) {
+		try {
 
-		return ResponseEntity.ok(tituloService.create(tituloRequest));
+			return ResponseEntity.ok(tituloService.create(tituloRequest));
+		} catch (EntityExistsException e) {
+
+			return ResponseEntity.status(HttpStatus.CONFLICT).header("X-Error-Message", e.getMessage()).body(null);
+		}
 	}
 
 	@Operation(summary = "Lista todos os títulos.")
 	@GetMapping
-	public List<Titulo> findAll() {
+	public ResponseEntity<List<Titulo>> findAll() {
+		try {
+			List<Titulo> titulos = tituloService.findAll();
 
-		return tituloService.findAll();
+			return new ResponseEntity<>(titulos, HttpStatus.OK);
+		} catch (EntityNotFoundException e) {
+
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).header("X-Error-Message", e.getMessage())
+					.body(Collections.emptyList());
+		}
 	}
 
 	@Operation(summary = "Busca um título por ID.")
 	@GetMapping("/{id}")
-	public TituloResponse findById(@PathVariable Long id) {
+	public ResponseEntity<TituloResponse> findById(@PathVariable Long id) {
+		try {
+			TituloResponse tituloResponse = tituloService.findById(id);
 
-		return tituloService.findById(id);
+			return ResponseEntity.ok(tituloResponse);
+		} catch (EntityNotFoundException e) {
+
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).header("X-Error-Message", e.getMessage()).body(null);
+		}
 	}
 
 	@Operation(summary = "Atualiza um título.")
 	@PutMapping()
-	public TituloResponse update(@RequestBody TituloRequest tituloRequest) {
+	public ResponseEntity<TituloResponse> update(@RequestBody TituloRequest tituloRequest) {
+		try {
+			tituloService.update(tituloRequest);
 
-		return tituloService.update(tituloRequest);
+			return ResponseEntity.noContent().build();
+		} catch (EntityNotFoundException e) {
+
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).header("X-Error-Message", e.getMessage()).body(null);
+		} catch (EntityExistsException e) {
+
+			return ResponseEntity.status(HttpStatus.CONFLICT).header("X-Error-Message", e.getMessage()).body(null);
+		}
 	}
 
 	@Operation(summary = "Deleta um título.")
 	@DeleteMapping("/{id}")
-	public void deleteById(@PathVariable Long id) {
-		tituloService.deleteById(id);
+	public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+		try {
+			tituloService.deleteById(id);
+
+			return ResponseEntity.noContent().build();
+		} catch (EntityNotFoundException e) {
+
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).header("X-Error-Message", e.getMessage()).body(null);
+		}
 	}
 }

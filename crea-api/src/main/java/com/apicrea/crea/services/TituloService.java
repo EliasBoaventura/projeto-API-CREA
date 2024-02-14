@@ -1,6 +1,7 @@
 package com.apicrea.crea.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class TituloService {
 	}
 
 	public TituloResponse findById(Long tituloId) {
-		verificaTitulo(tituloId);
+		verificarExistenciaTitulo(tituloId);
 
 		TituloRequest tituloRequest = new TituloRequest(tituloRepository.findById(tituloId).get());
 
@@ -45,7 +46,7 @@ public class TituloService {
 	}
 
 	public TituloResponse update(TituloRequest tituloRequest) {
-		verificaTitulo(tituloRequest.getId());
+		verificarExistenciaTitulo(tituloRequest.getId());
 
 		if (tituloRepository.existsByDescricao(tituloRequest.getDescricao())) {
 			throw new EntityExistsException("O título já existe.");
@@ -57,7 +58,7 @@ public class TituloService {
 	}
 
 	public void deleteById(Long tituloId) {
-		verificaTitulo(tituloId);
+		verificarExistenciaTitulo(tituloId);
 		if (tituloRepository.verificaTituloEmUso(tituloId) > 0) {
 			throw new EntityNotFoundException(
 					"Este título não pode ser removido, pois está vinculado a um profissional.");
@@ -66,10 +67,10 @@ public class TituloService {
 		tituloRepository.deleteById(tituloId);
 	}
 
-	private void verificaTitulo(Long tituloId) {
-		if (tituloRepository.findById(tituloId) != null) {
-			new EntityNotFoundException("Título não encontrado com o ID: " + tituloId + ".");
+	private void verificarExistenciaTitulo(Long idTitulo) {
+		Optional<Titulo> tituOptional = tituloRepository.findById(idTitulo);
+		if (tituOptional.isEmpty()) {
+			throw new EntityNotFoundException("Esse título não existe.");
 		}
 	}
-
 }
