@@ -40,6 +40,7 @@ Para executar o projeto, siga estas etapas:
 ## Documentação da API 📖
 
 Após iniciar a aplicação, você pode acessar a documentação da API por meio do Swagger. Abra seu navegador e navegue para [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html). Lá, você encontrará uma descrição dos endpoints disponíveis, bem como a capacidade de testá-los diretamente do navegador.
+Importante: ao preencher os campos enums certifique de digitar em caixa alta. Exemplo: "ATIVO", "REGISTRADO".
 
 ## Contribuição 🤝
 
